@@ -456,7 +456,7 @@ function ButtonPreview({ buttonText, style }: ButtonPreviewProps) {
     <button
       id="button"
       style={style}
-      className="w-fit self-start border border-lime-500 dark:border-lime-600 text-sm tracking-tight flex items-center justify-center gap-2 text-zinc-950 dark:text-white hover:border-lime-500 dark:hover:text-zinc-950 transition-all"
+      className="cursor-pointer self-start border border-lime-500 dark:border-lime-600 text-sm tracking-tight flex items-center justify-center gap-2 text-zinc-950 dark:text-white hover:border-lime-500 dark:hover:text-zinc-950 transition-all"
     >
       {buttonText}
     </button>
@@ -493,12 +493,12 @@ function Modal({ code, onClose }: { code: string; onClose: () => void }) {
 
 export default function Home() {
   const [buttonText, setButtonText] = useState("This is a test button.");
-  const [roundedTL, setRoundedTL] = useState(0);
-  const [roundedTR, setRoundedTR] = useState(0);
-  const [roundedBR, setRoundedBR] = useState(0);
-  const [roundedBL, setRoundedBL] = useState(0);
-  const [paddingX, setPaddingX] = useState(10);
-  const [paddingY, setPaddingY] = useState(10);
+  const [roundedTL, setRoundedTL] = useState(9);
+  const [roundedTR, setRoundedTR] = useState(9);
+  const [roundedBR, setRoundedBR] = useState(9);
+  const [roundedBL, setRoundedBL] = useState(9);
+  const [paddingX, setPaddingX] = useState(6);
+  const [paddingY, setPaddingY] = useState(8);
   const [lockRoundness, setLockRoundness] = useState(false);
   const [lockPadding, setLockPadding] = useState(false);
   const [buttonColor, setButtonColor] = useState("#84cc16");
@@ -507,9 +507,10 @@ export default function Home() {
   const [textColor, setTextColor] = useState("#000000");
   const [showModal, setShowModal] = useState(false);
 
-  const borderRadiusClasses = `rounded-tl-[${roundedTL}px] rounded-tr-[${roundedTR}px] rounded-br-[${roundedBR}px] rounded-bl-[${roundedBL}px]`;
-  const paddingClasses = `py-[${paddingY}px] px-[${paddingX}px]`;
-  const baseClasses = `${borderRadiusClasses} ${paddingClasses} text-sm tracking-tight w-fit flex items-center justify-center gap-2 border border-lime-500 dark:border-lime-600 transition-all`;
+  const rounded = roundedTL === roundedTR && roundedTR === roundedBR && roundedBR === roundedBL ? roundedTL : null;
+  const borderRadiusClasses = rounded ? `rounded-[${rounded}px]` : `rounded-tl-[${roundedTL}px] rounded-tr-[${roundedTR}px] rounded-br-[${roundedBR}px] rounded-bl-[${roundedBL}px]`;
+  const paddingClasses = paddingX === paddingY ? `p-[${paddingX}px]` : `py-[${paddingY}px] px-[${paddingX}px]`;
+  const baseClasses = `cursor-pointer ${borderRadiusClasses} ${paddingClasses} text-sm tracking-tight flex items-center justify-center gap-2 border border-lime-500 dark:border-lime-600 transition-all`;
 
   // Determine which color to use for border
   const finalBorderColor = useSameBorder ? buttonColor : borderColor;
