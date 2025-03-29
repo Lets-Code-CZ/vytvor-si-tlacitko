@@ -154,7 +154,7 @@ function ButtonSettings({
     <aside className="xl:w-1/4 lg:w-1/3 md:w-1/2 bg-zinc-950 border border-zinc-900 rounded-xl p-2 flex flex-col justify-between gap-4">
       <div className="p-2 lg:p-4 !pb-0 flex items-center justify-between gap-4">
         <h2 className="text-xl tracking-tighter font-bold">Generate me a button</h2>
-        <p className="text-sm text-zinc-400 tracking-tight">v0.6</p>
+        <p className="text-sm text-zinc-400 tracking-tight">v0.1</p>
       </div>
       {/* Settings */}
       <div className="h-full max-h-full bg-zinc-900/50 border border-zinc-800/50 rounded-lg overflow-y-auto p-2 lg:p-4">
@@ -456,7 +456,7 @@ function ButtonPreview({ buttonText, style }: ButtonPreviewProps) {
     <button
       id="button"
       style={style}
-      className="w-fit self-start border border-lime-500 dark:border-lime-600 text-xs tracking-tight flex items-center justify-center gap-2 text-zinc-950 dark:text-white hover:border-lime-500 dark:hover:text-zinc-950 transition-all"
+      className="w-fit self-start border border-lime-500 dark:border-lime-600 text-sm tracking-tight flex items-center justify-center gap-2 text-zinc-950 dark:text-white hover:border-lime-500 dark:hover:text-zinc-950 transition-all"
     >
       {buttonText}
     </button>
@@ -509,11 +509,11 @@ export default function Home() {
 
   const borderRadiusClasses = `rounded-tl-[${roundedTL}px] rounded-tr-[${roundedTR}px] rounded-br-[${roundedBR}px] rounded-bl-[${roundedBL}px]`;
   const paddingClasses = `py-[${paddingY}px] px-[${paddingX}px]`;
-  const baseClasses = `w-fit self-start border border-lime-500 dark:border-lime-600 ${borderRadiusClasses} ${paddingClasses} text-xs tracking-tight flex items-center justify-center gap-2 transition-all`;
-  
+  const baseClasses = `${borderRadiusClasses} ${paddingClasses} text-sm tracking-tight w-fit flex items-center justify-center gap-2 border border-lime-500 dark:border-lime-600 transition-all`;
+
   // Determine which color to use for border
   const finalBorderColor = useSameBorder ? buttonColor : borderColor;
-  const tailwindCode = `<button class="${baseClasses} bg-[${buttonColor}] border-[${finalBorderColor}] text-[${textColor}]">${buttonText}</button>`;
+  const tailwindCode = `<button className="${baseClasses} bg-[${buttonColor}] border-[${finalBorderColor}] text-[${textColor}]">${buttonText}</button>`;
   const previewStyle = {
     backgroundColor: buttonColor,
     padding: `${paddingY}px ${paddingX}px`,
@@ -564,10 +564,14 @@ export default function Home() {
         textColor={textColor}
         setTextColor={setTextColor}
       />
-      <main className="w-full bg-zinc-950 border border-zinc-900 rounded-xl p-4 lg:p-6 xl:p-8 flex flex-col gap-4">
-        <h1 className="text-4xl font-bold mb-4">Preview</h1>
-        <p className="mb-4">Nastavte vlastnosti tlačítka a zobrazí se zde náhled.</p>
-        <ButtonPreview buttonText={buttonText} style={previewStyle} />
+      <main className="w-full bg-zinc-950 border border-zinc-900 rounded-xl p-4 lg:p-6 xl:p-8 flex flex-col items-center justify-center text-center gap-4">
+        <div>
+          <h1 className="text-5xl tracking-tighter font-bold mb-4">Button preview</h1>
+          <p className="mb-4 text-sm text-zinc-400 tracking-tight">Customize the button properties and the preview will appear here. Go ahead and forge the best button ever!</p>
+        </div>
+        <div>
+          <ButtonPreview buttonText={buttonText} style={previewStyle} />
+        </div>
       </main>
     </div>
   );
