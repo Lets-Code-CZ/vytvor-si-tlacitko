@@ -540,8 +540,11 @@ export default function Home() {
   const baseClasses = `cursor-pointer ${borderRadiusClasses} ${paddingClasses} text-sm tracking-tight flex items-center justify-center gap-2 transition-all border`;
 
   // Check if the button color is in the popular colors list. If so, use the color name instead of the hex value.
-  const buttonColorClass = Object.entries(popularColors).find(([key, value]) => value === buttonColor) ? `bg-${Object.entries(popularColors).find(([key, value]) => value === buttonColor)?.[0]}` : `bg-[${buttonColor}]`;
-  const textColorClass = Object.entries(popularColors).find(([key, value]) => value === textColor) ? `text-${Object.entries(popularColors).find(([key, value]) => value === textColor)?.[0]}` : `text-[${textColor}]`;
+  const normalizedButtonColor = buttonColor.length === 9 && buttonColor.slice(-2) === 'ff' ? buttonColor.slice(0, 7) : buttonColor;
+  const normalizedTextColor = textColor.length === 9 && textColor.slice(-2) === 'ff' ? textColor.slice(0, 7) : textColor;
+
+  const buttonColorClass = Object.entries(popularColors).find(([key, value]) => value.toLowerCase() === normalizedButtonColor.toLowerCase()) ? `bg-${Object.entries(popularColors).find(([key, value]) => value.toLowerCase() === normalizedButtonColor.toLowerCase())?.[0]}` : `bg-[${normalizedButtonColor}]`;
+  const textColorClass = Object.entries(popularColors).find(([key, value]) => value.toLowerCase() === normalizedTextColor.toLowerCase()) ? `text-${Object.entries(popularColors).find(([key, value]) => value.toLowerCase() === normalizedTextColor.toLowerCase())?.[0]}` : `text-[${normalizedTextColor}]`;
 
   // Determine which color to use for border
   const finalBorderColor = useSameBorder ? buttonColor : borderColor;
