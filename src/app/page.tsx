@@ -507,14 +507,45 @@ export default function Home() {
   const [textColor, setTextColor] = useState("#000000");
   const [showModal, setShowModal] = useState(false);
 
+  const popularColors: { [key: string]: string } = {
+    "black": "#000000",
+    "white": "#FFFFFF",
+    "red-500": "#EF4444",
+    "red-700": "#B91C1C",
+    "green-500": "#22C55E",
+    "green-700": "#16A34A",
+    "blue-500": "#3B82F6",
+    "blue-700": "#1D4ED8",
+    "yellow-500": "#F59E0B",
+    "yellow-700": "#D97706",
+    "purple-500": "#8B5CF6",
+    "purple-700": "#6D28D9",
+    "sky-500": "#0EA5E9",
+    "sky-700": "#0284C7",
+    "orange-500": "#F97316",
+    "orange-700": "#EA580C",
+    "gray-500": "#9CA3AF",
+    "gray-700": "#6B7280",
+    "lime-500": "#A3E635",
+    "lime-700": "#84CC16",
+    "teal-500": "#14B8A6",
+    "teal-700": "#0D9488",
+    "pink-500": "#EC4899",
+    "pink-700": "#BE185D",
+  };
+
   const rounded = roundedTL === roundedTR && roundedTR === roundedBR && roundedBR === roundedBL ? roundedTL : null;
   const borderRadiusClasses = rounded ? `rounded-[${rounded}px]` : `rounded-tl-[${roundedTL}px] rounded-tr-[${roundedTR}px] rounded-br-[${roundedBR}px] rounded-bl-[${roundedBL}px]`;
   const paddingClasses = paddingX === paddingY ? `p-[${paddingX}px]` : `py-[${paddingY}px] px-[${paddingX}px]`;
-  const baseClasses = `cursor-pointer ${borderRadiusClasses} ${paddingClasses} text-sm tracking-tight flex items-center justify-center gap-2 border border-lime-500 dark:border-lime-600 transition-all`;
+  const baseClasses = `cursor-pointer ${borderRadiusClasses} ${paddingClasses} text-sm tracking-tight flex items-center justify-center gap-2 transition-all border`;
+
+  // Check if the button color is in the popular colors list. If so, use the color name instead of the hex value.
+  const buttonColorClass = Object.entries(popularColors).find(([key, value]) => value === buttonColor) ? `bg-${Object.entries(popularColors).find(([key, value]) => value === buttonColor)?.[0]}` : `bg-[${buttonColor}]`;
+  const textColorClass = Object.entries(popularColors).find(([key, value]) => value === textColor) ? `text-${Object.entries(popularColors).find(([key, value]) => value === textColor)?.[0]}` : `text-[${textColor}]`;
 
   // Determine which color to use for border
   const finalBorderColor = useSameBorder ? buttonColor : borderColor;
-  const tailwindCode = `<button className="${baseClasses} bg-[${buttonColor}] border-[${finalBorderColor}] text-[${textColor}]">${buttonText}</button>`;
+  const tailwindCode = `<button className="${baseClasses} ${buttonColorClass} border-[${finalBorderColor}] ${textColorClass}">${buttonText}</button>`;
   const previewStyle = {
     backgroundColor: buttonColor,
     padding: `${paddingY}px ${paddingX}px`,
