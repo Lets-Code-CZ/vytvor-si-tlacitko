@@ -1,14 +1,14 @@
 "use client";
 import React, { useState, useMemo } from "react";
 
-// Import refaktorovaných komponent
+// Import komponent
 import ButtonSettings from "@/components/ButtonSettings"; // Uprav cesty dle potřeby
 import ButtonPreview from "@/components/ButtonPreview";
 import Modal from "@/components/common/Modal";
 
-// Definice populárních barev (může být i v constants/colors.ts)
+// Definice populárních barev
 const popularColors: { [key: string]: string } = {
-  black: "#000000",
+  /* ... (stejné jako předtím) ... */ black: "#000000",
   white: "#ffffff",
   "slate-500": "#64748b",
   "slate-700": "#334155",
@@ -56,81 +56,148 @@ const popularColors: { [key: string]: string } = {
   "rose-700": "#be123c",
 };
 
-// Funkce pro nalezení nejbližší Tailwind barvy (zjednodušená verze, pouze hledá přesný match)
-// Může být rozšířena o hledání nejbližší barvy, pokud přesný match neexistuje.
-const findTailwindColorName = (hexColor: string): string | null => {
-  // Normalizace HEX (odstranění alfa, malá písmena)
-  const normalizedHex = hexColor.toLowerCase().slice(0, 7); // Bereme jen #rrggbb
+// Helper funkce pro generování Tailwind třídy pro barvu
+const getColorClass = (prefix: string, colorValue: string): string => {
+  /* ... (stejné jako předtím) ... */
+  const normalizedHex = colorValue.toLowerCase().slice(0, 7);
   const entry = Object.entries(popularColors).find(
     ([_, value]) => value.toLowerCase() === normalizedHex
   );
-  return entry ? entry[0] : null; // Vrací název barvy (např. "lime-500") nebo null
+  const colorName = entry ? entry[0] : null;
+  if (!colorValue || colorValue === "transparent" || colorValue.endsWith("00"))
+    return "";
+  return colorName ? `${prefix}-${colorName}` : `${prefix}-[${colorValue}]`;
 };
 
 export default function Home() {
   // --- Stavy ---
-  const [buttonText, setButtonText] = useState("Klikni na mě!");
+  const [buttonText, setButtonText] = useState("Super Tlačítko");
+  // Typografie --- NOVÉ ---
+  const [textSize, setTextSize] = useState("base"); // např. 'sm', 'lg'
+  const [fontWeight, setFontWeight] = useState("semibold"); // např. 'normal', 'bold'
+  const [letterSpacing, setLetterSpacing] = useState("tight"); // např. 'normal', 'wider'
+  // Ostatní stavy
   const [roundedTL, setRoundedTL] = useState(8);
   const [roundedTR, setRoundedTR] = useState(8);
   const [roundedBR, setRoundedBR] = useState(8);
   const [roundedBL, setRoundedBL] = useState(8);
-  const [paddingX, setPaddingX] = useState(20); // Zvětšený výchozí padding
-  const [paddingY, setPaddingY] = useState(12); // Zvětšený výchozí padding
-  const [lockRoundness, setLockRoundness] = useState(true); // Výchozí zamčení
+  const [paddingX, setPaddingX] = useState(24);
+  const [paddingY, setPaddingY] = useState(12);
+  const [lockRoundness, setLockRoundness] = useState(true);
   const [lockPadding, setLockPadding] = useState(false);
-  const [buttonColor, setButtonColor] = useState("#84cc16"); // Lime-500
+  const [buttonColor, setButtonColor] = useState("#84cc16");
   const [useSameBorder, setUseSameBorder] = useState(true);
-  const [borderColor, setBorderColor] = useState("#4d7c0f"); // Lime-700 (pro případ, že useSameBorder=false)
-  const [textColor, setTextColor] = useState("#1a2e05"); // Tmavě zelená pro kontrast s lime
+  const [borderColor, setBorderColor] = useState("#4d7c0f");
+  const [textColor, setTextColor] = useState("#1a2e05");
+  const [borderWidth, setBorderWidth] = useState(1);
+  const [boxShadow, setBoxShadow] = useState(
+    "0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1)"
+  );
+  const [hoverBgColor, setHoverBgColor] = useState("#a3e635");
+  const [hoverBorderColor, setHoverBorderColor] = useState("#65a30d");
+  const [hoverTextColor, setHoverTextColor] = useState("#1a2e05");
+  const [activeBgColor, setActiveBgColor] = useState("#65a30d");
+  const [activeBorderColor, setActiveBorderColor] = useState("#3f6212");
+  const [activeTextColor, setActiveTextColor] = useState("#ffffff");
+  const [hoverAnimation, setHoverAnimation] = useState("animate-none");
+  const [activeAnimation, setActiveAnimation] = useState("animate-pulse-once");
+  const [transitionDuration, setTransitionDuration] = useState(200);
+  const [transitionEasing, setTransitionEasing] = useState("in-out");
+  const [customTransitionEasing, setCustomTransitionEasing] = useState(
+    "cubic-bezier(0.4, 0, 0.2, 1)"
+  );
   const [showModal, setShowModal] = useState(false);
 
-  // --- Odvozené hodnoty a výpočty (optimalizováno s useMemo) ---
-
-  // Výpočet finální barvy rámečku
+  // --- Odvozené hodnoty a výpočty ---
   const finalBorderColor = useMemo(
     () => (useSameBorder ? buttonColor : borderColor),
     [useSameBorder, buttonColor, borderColor]
   );
 
-  // Výpočet Tailwind tříd (optimalizováno)
+  // Výpočet Tailwind tříd (přidána typografie)
   const tailwindCode = useMemo(() => {
-    // Zaoblení
+    let classes: string[] = [];
+    classes.push(
+      "cursor-pointer",
+      "inline-flex",
+      "items-center",
+      "justify-center",
+      "gap-2"
+    );
+
+    // Typografie --- NOVÉ ---
+    classes.push(`text-${textSize}`);
+    classes.push(`font-${fontWeight}`);
+    // Pro letter spacing, 'normal' často nemá třídu, ostatní ano
+    if (letterSpacing !== "normal") {
+      classes.push(`tracking-${letterSpacing}`);
+    }
+
+    // Ostatní třídy (stejné jako předtím)
     const isUniformRoundness =
       roundedTL === roundedTR &&
       roundedTR === roundedBR &&
       roundedBR === roundedBL;
-    const borderRadiusClasses = isUniformRoundness
-      ? `rounded-[${roundedTL}px]`
-      : `rounded-tl-[${roundedTL}px] rounded-tr-[${roundedTR}px] rounded-br-[${roundedBR}px] rounded-bl-[${roundedBL}px]`;
-
-    // Padding
+    classes.push(
+      isUniformRoundness
+        ? `rounded-[${roundedTL}px]`
+        : `rounded-tl-[${roundedTL}px] rounded-tr-[${roundedTR}px] rounded-br-[${roundedBR}px] rounded-bl-[${roundedBL}px]`
+    );
     const isUniformPadding = paddingX === paddingY;
-    const paddingClasses = isUniformPadding
-      ? `p-[${paddingX}px]`
-      : `px-[${paddingX}px] py-[${paddingY}px]`;
+    classes.push(
+      isUniformPadding
+        ? `p-[${paddingX}px]`
+        : `px-[${paddingX}px] py-[${paddingY}px]`
+    );
+    classes.push(getColorClass("bg", buttonColor));
+    classes.push(getColorClass("text", textColor)); // Základní barva textu
+    classes.push(`border-[${borderWidth}px]`);
+    classes.push(getColorClass("border", finalBorderColor));
+    if (boxShadow && boxShadow.trim() !== "none" && boxShadow.trim() !== "") {
+      const shadowValue = boxShadow.replace(/\s+/g, "_");
+      classes.push(`shadow-[${shadowValue}]`);
+    }
+    classes.push("transition-all");
+    classes.push(`duration-[${transitionDuration}ms]`);
+    if (transitionEasing === "custom") {
+      const bezierValue = customTransitionEasing.replace(/\s+/g, "");
+      if (
+        bezierValue.startsWith("cubic-bezier(") &&
+        bezierValue.endsWith(")")
+      ) {
+        classes.push(`ease-[${bezierValue}]`);
+      } else {
+        classes.push("ease-in-out");
+      }
+    } else {
+      classes.push(`ease-${transitionEasing}`);
+    }
+    const hoverBgClass = getColorClass("hover:bg", hoverBgColor);
+    const hoverBorderClass = getColorClass("hover:border", hoverBorderColor);
+    const hoverTextClass = getColorClass("hover:text", hoverTextColor);
+    if (hoverBgClass) classes.push(hoverBgClass);
+    if (hoverBorderClass) classes.push(hoverBorderClass);
+    if (hoverTextClass) classes.push(hoverTextClass);
+    if (hoverAnimation !== "animate-none")
+      classes.push(`hover:${hoverAnimation}`);
+    const activeBgClass = getColorClass("active:bg", activeBgColor);
+    const activeBorderClass = getColorClass("active:border", activeBorderColor);
+    const activeTextClass = getColorClass("active:text", activeTextColor);
+    if (activeBgClass) classes.push(activeBgClass);
+    if (activeBorderClass) classes.push(activeBorderClass);
+    if (activeTextClass) classes.push(activeTextClass);
+    if (activeAnimation !== "animate-none")
+      classes.push(`active:${activeAnimation}`);
 
-    // Barvy - pokus o nalezení Tailwind názvu, jinak fallback na arbitrary value
-    const bgColorName = findTailwindColorName(buttonColor);
-    const bgColorClass = bgColorName
-      ? `bg-${bgColorName}`
-      : `bg-[${buttonColor}]`;
-
-    const textColorName = findTailwindColorName(textColor);
-    const textColorClass = textColorName
-      ? `text-${textColorName}`
-      : `text-[${textColor}]`;
-
-    const borderColorName = findTailwindColorName(finalBorderColor);
-    const borderColorClass = borderColorName
-      ? `border-${borderColorName}`
-      : `border-[${finalBorderColor}]`;
-
-    // Základní třídy
-    const baseClasses = `cursor-pointer inline-flex items-center justify-center gap-2 transition-all duration-200 ease-in-out border`; // Přidáno inline-flex
-
-    return `<button className="${baseClasses} ${borderRadiusClasses} ${paddingClasses} ${bgColorClass} ${borderColorClass} ${textColorClass}">\n  ${buttonText}\n</button>`;
+    const classString = classes.filter((c) => c !== "").join(" ");
+    return `<button className="${classString}">\n  ${
+      buttonText || "Tlačítko"
+    }\n</button>`;
   }, [
     buttonText,
+    textSize,
+    fontWeight,
+    letterSpacing, // Přidány závislosti na typografii
     roundedTL,
     roundedTR,
     roundedBR,
@@ -138,60 +205,44 @@ export default function Home() {
     paddingX,
     paddingY,
     buttonColor,
-    finalBorderColor,
     textColor,
+    borderWidth,
+    finalBorderColor,
+    boxShadow,
+    transitionDuration,
+    transitionEasing,
+    customTransitionEasing,
+    hoverBgColor,
+    hoverBorderColor,
+    hoverTextColor,
+    hoverAnimation,
+    activeBgColor,
+    activeBorderColor,
+    activeTextColor,
+    activeAnimation,
   ]);
 
-  // Výpočet inline stylů pro náhled (optimalizováno)
-  const previewStyle: React.CSSProperties = useMemo(
-    () => ({
-      backgroundColor: buttonColor,
-      padding: `${paddingY}px ${paddingX}px`,
-      borderRadius: `${roundedTL}px ${roundedTR}px ${roundedBR}px ${roundedBL}px`,
-      borderColor: finalBorderColor,
-      color: textColor,
-      borderWidth: "1px", // Zajistíme viditelnost borderu
-      borderStyle: "solid", // Zajistíme viditelnost borderu
-    }),
-    [
-      buttonColor,
-      paddingY,
-      paddingX,
-      roundedTL,
-      roundedTR,
-      roundedBR,
-      roundedBL,
-      finalBorderColor,
-      textColor,
-    ]
-  );
-
   // --- Funkce ---
-
-  // Kopírování do schránky
   const copyToClipboard = async () => {
+    /* ... (stejné jako předtím) ... */
     try {
       await navigator.clipboard.writeText(tailwindCode);
-      setShowModal(true); // Zobrazí modal po úspěšném kopírování
+      setShowModal(true);
     } catch (err) {
-      console.error("Chyba při kopírování kódu:", err);
-      alert("Chyba při kopírování kódu."); // Záložní alert
+      console.error("Chyba:", err);
+      alert("Chyba.");
     }
   };
-
-  // Zavření modalu
   const closeModal = () => setShowModal(false);
 
   // --- Render ---
   return (
-    // Hlavní layout stránky
     <div className="flex flex-col md:flex-row gap-4 p-4 h-screen max-h-screen bg-zinc-900 text-white overflow-hidden">
-      {/* Zobrazení modalu, pokud je showModal true */}
       {showModal && <Modal code={tailwindCode} onClose={closeModal} />}
 
-      {/* Panel nastavení */}
+      {/* Panel nastavení - předáváme všechny props, včetně typografie */}
       <ButtonSettings
-        // Předání všech stavů a setterů jako props
+        // ... (všechny předchozí props) ...
         buttonText={buttonText}
         setButtonText={setButtonText}
         roundedTL={roundedTL}
@@ -220,11 +271,44 @@ export default function Home() {
         setBorderColor={setBorderColor}
         textColor={textColor}
         setTextColor={setTextColor}
+        boxShadow={boxShadow}
+        setBoxShadow={setBoxShadow}
+        borderWidth={borderWidth}
+        setBorderWidth={setBorderWidth}
+        hoverBgColor={hoverBgColor}
+        setHoverBgColor={setHoverBgColor}
+        hoverBorderColor={hoverBorderColor}
+        setHoverBorderColor={setHoverBorderColor}
+        hoverTextColor={hoverTextColor}
+        setHoverTextColor={setHoverTextColor}
+        activeBgColor={activeBgColor}
+        setActiveBgColor={setActiveBgColor}
+        activeBorderColor={activeBorderColor}
+        setActiveBorderColor={setActiveBorderColor}
+        activeTextColor={activeTextColor}
+        setActiveTextColor={setActiveTextColor}
+        hoverAnimation={hoverAnimation}
+        setHoverAnimation={setHoverAnimation}
+        activeAnimation={activeAnimation}
+        setActiveAnimation={setActiveAnimation}
+        transitionDuration={transitionDuration}
+        setTransitionDuration={setTransitionDuration}
+        transitionEasing={transitionEasing}
+        setTransitionEasing={setTransitionEasing}
+        customTransitionEasing={customTransitionEasing}
+        setCustomTransitionEasing={setCustomTransitionEasing}
+        // Nové props pro typografii
+        textSize={textSize}
+        setTextSize={setTextSize}
+        fontWeight={fontWeight}
+        setFontWeight={setFontWeight}
+        letterSpacing={letterSpacing}
+        setLetterSpacing={setLetterSpacing}
       />
 
       {/* Hlavní oblast pro náhled */}
       <main className="w-full flex-grow bg-zinc-950 border border-zinc-900 rounded-xl p-4 lg:p-6 xl:p-8 flex flex-col items-center justify-center text-center gap-6 relative overflow-hidden">
-        {/* Mřížka na pozadí (volitelné) */}
+        {/* Mřížka na pozadí */}
         <div
           className="absolute inset-0 z-0 opacity-10"
           style={{
@@ -234,30 +318,52 @@ export default function Home() {
           }}
         ></div>
 
-        {/* Obsah náhledu - nad mřížkou */}
+        {/* Obsah náhledu */}
         <div className="relative z-10 flex flex-col items-center">
-          <div className="mb-8 max-w-md">
-            {" "}
-            {/* Omezení šířky textu */}
+          <div className="mb-8 max-w-lg">
             <h1 className="text-3xl sm:text-4xl md:text-5xl tracking-tighter font-bold mb-3">
               Náhled tlačítka
             </h1>
             <p className="text-sm sm:text-base text-zinc-400 tracking-tight">
-              Uprav vlastnosti v panelu vlevo a sleduj, jak se tlačítko mění v
-              reálném čase. Až budeš spokojený, zkopíruj si vygenerovaný
-              Tailwind kód.
+              Experimentuj s nastaveními! Náhled nyní zobrazuje i změnu barev
+              při najetí myší, kliknutí a <span className="font-bold">nastavení typografie</span>. Pro plný
+              efekt (animace) zkopíruj kód.
             </p>
           </div>
-          {/* Komponenta náhledu tlačítka */}
+          {/* Komponenta náhledu tlačítka - PŘIDÁNY TYPOGRAPHY PROPS */}
           <div className="mt-4">
-            {" "}
-            {/* Přidán margin top pro oddělení */}
-            <ButtonPreview buttonText={buttonText} style={previewStyle} />
+            <ButtonPreview
+              buttonText={buttonText}
+              baseBgColor={buttonColor}
+              baseBorderColor={finalBorderColor}
+              baseTextColor={textColor}
+              hoverBgColor={hoverBgColor}
+              hoverBorderColor={hoverBorderColor}
+              hoverTextColor={hoverTextColor}
+              activeBgColor={activeBgColor}
+              activeBorderColor={activeBorderColor}
+              activeTextColor={activeTextColor}
+              paddingX={paddingX}
+              paddingY={paddingY}
+              roundedTL={roundedTL}
+              roundedTR={roundedTR}
+              roundedBR={roundedBR}
+              roundedBL={roundedBL}
+              borderWidth={borderWidth}
+              boxShadow={boxShadow}
+              transitionDuration={transitionDuration}
+              transitionEasing={transitionEasing}
+              customTransitionEasing={customTransitionEasing}
+              // Nové props pro typografii
+              textSize={textSize}
+              fontWeight={fontWeight}
+              letterSpacing={letterSpacing}
+            />
           </div>
         </div>
       </main>
 
-      {/* Přidání globálních stylů pro scrollbar, pokud je potřeba */}
+      {/* Globální styly pro scrollbar */}
       <style jsx global>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 6px;
@@ -267,12 +373,12 @@ export default function Home() {
           background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background-color: #3f3f46; // zinc-700
+          background-color: #3f3f46;
           border-radius: 10px;
         }
         .custom-scrollbar {
           scrollbar-width: thin;
-          scrollbar-color: #3f3f46 transparent; // zinc-700
+          scrollbar-color: #3f3f46 transparent;
         }
       `}</style>
     </div>

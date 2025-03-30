@@ -87,3 +87,60 @@ body {
     background-color: #fff; /* Bílá */
     border-color: #d1d5db; /* Světle šedá */
 }
+
+/* globals.css nebo ekvivalentní globální CSS soubor */
+
+/* --- Preset Animace --- */
+
+/* 1. Pulse */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.9; }
+}
+.anim-pulse { animation: pulse 1s ease-in-out infinite; } /* Infinite pro ukázku, v hover/active bude kratší */
+
+/* 2. Shake */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-3px); }
+  20%, 40%, 60%, 80% { transform: translateX(3px); }
+}
+.anim-shake { animation: shake 0.5s ease-in-out; }
+
+/* 3. Bounce */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-8px); }
+  60% { transform: translateY(-4px); }
+}
+.anim-bounce { animation: bounce 1s ease; }
+
+/* 4. Tada */
+@keyframes tada {
+  0% { transform: scale(1); }
+  10%, 20% { transform: scale(0.9) rotate(-3deg); }
+  30%, 50%, 70%, 90% { transform: scale(1.1) rotate(3deg); }
+  40%, 60%, 80% { transform: scale(1.1) rotate(-3deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+.anim-tada { animation: tada 1s ease; }
+
+/* 5. Ping Subtle (jemnější verze Tailwind pingu) */
+@keyframes ping-subtle {
+  0% { transform: scale(1); opacity: 1; }
+  75%, 100% { transform: scale(1.1); opacity: 0; }
+}
+.anim-ping-subtle { animation: ping-subtle 0.7s cubic-bezier(0, 0, 0.2, 1); }
+
+/* --- Třídy pro použití v Tailwindu --- */
+/* Tyto třídy budou přidány pomocí hover: a active: variant */
+/* Např.: hover:animate-pulse-once */
+
+.animate-pulse-once { animation: pulse 0.6s ease-in-out 1; }
+.animate-shake-once { animation: shake 0.5s ease-in-out 1; }
+.animate-bounce-once { animation: bounce 0.8s ease 1; }
+.animate-tada-once { animation: tada 1s ease 1; }
+.animate-ping-subtle-once { animation: ping-subtle 0.7s cubic-bezier(0, 0, 0.2, 1) 1; }
+
+/* Přidáme i variantu 'žádná animace' pro select */
+.animate-none { animation: none; }
