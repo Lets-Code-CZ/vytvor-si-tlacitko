@@ -1,9 +1,14 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧠 Let's Code — Vytvoř si tlačítko!
+> [!NOTE]
+> Demo projektu je k dispozici na [této stránce](https://tlacitko.lets-code.cz).
 
-## Getting Started
+Next.js open source projekt vytvořený pod 24 hodin za účelem otestování vibe-codingu různých modelů pomocí Visual Studio Code + Cline rozšíření.
+Jedná se o menší stránku nabízející vytvoření tlačítka pro TailwindCSS v známém no-code prostředí, pomocí kterého se dají měnit barvy a velikosti tlačítka a jeho obsahu.
 
-First, run the development server:
+Tlačítko se dá následně velice jednoduše vyexportovat do schránky a vložit kamkoliv je potřeba. Styl tlačítka a kód se aktualizuje v reálném čase a ovládání je velice intuitivní.
 
+## 🛠️ Jak spustit projekt?
+### Vývojové prostředí:
 ```bash
 npm run dev
 # or
@@ -14,23 +19,20 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Otevři [http://localhost:3000](http://localhost:3000) v prohlížeči a stránku si můžeš prohlédnout.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Spuštění na svém serveru (produkce):
+```bash
+git clone ... nebo gh clone ...
+npm install
+npm run build
+npm run start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 💻 Použité modely při testování
+Modely byly používané převážně pro logiku ovládání inputů, vybírání barev, uplatňování stylů na tlačítku a další podobné úkoly. UI/UX nebylo generované umělou inteligencí.
+| Model | % naprogramovaného kódu projektu | Hodnocení |
+| --- | --- | --- |
+| OpenAI o3-mini [REASONING] | 30 % | 7/10 (dobrá rychlost, nízké kontextové okno, občasné halucinace a self-gaslighting) |
+| Google Gemini 2.0 Flash | 10 % | 5/10 (vysoká rychlost, malá inteligence, problémy s během) |
+| Google Gemini 2.5 Pro [REASONING] | 25 % | 9/10 (vysoká rychlost, vysoká inteligence, milion tokenů kontextové okno, většina kódu byla na první pokus funkční a správně) |
