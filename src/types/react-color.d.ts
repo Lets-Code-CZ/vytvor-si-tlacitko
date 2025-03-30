@@ -3,8 +3,8 @@
 // Tento soubor poskytuje základní typové definice pro react-color,
 // aby TypeScript a ESLint lépe rozuměly props komponent jako SketchPicker.
 
-declare module 'react-color' {
-  import * as React from 'react';
+declare module "react-color" {
+  import * as React from "react";
 
   export interface RGBColor {
     r: number;
@@ -37,30 +37,32 @@ declare module 'react-color' {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  export type ColorChangeHandler = (color: ColorResult, event: React.ChangeEvent<any>) => void;
+  export type ColorChangeHandler = (
+    color: ColorResult,
+    event: React.ChangeEvent<any>
+  ) => void;
 
-  export interface ColorPickerProps<A> {
+  // OPRAVA: Odstraněn nepoužitý generický parametr <A>
+  export interface ColorPickerProps {
     color?: string | RGBColor | HSLColor | HSVColor;
     className?: string;
-    styles?: Partial<any>; // Styly mohou být komplexní
+    // OPRAVA: Použití Record<string, any> místo Partial<any> a ponechání disable komentáře pro jistotu
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    styles?: Partial<Record<string, any>>; // Styly mohou být komplexní
     onChange?: ColorChangeHandler;
     onChangeComplete?: ColorChangeHandler;
   }
 
-   export interface SketchPickerProps extends ColorPickerProps<SketchPicker> {
-        disableAlpha?: boolean;
-        presetColors?: string[] | { color: string; title: string }[];
-        width?: string | number;
-   }
+  // Typ pro SketchPicker rozšiřuje obecný ColorPickerProps
+  export interface SketchPickerProps extends ColorPickerProps {
+    disableAlpha?: boolean;
+    presetColors?: string[] | { color: string; title: string }[];
+    width?: string | number;
+  }
 
-   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-   export class SketchPicker extends React.Component<SketchPickerProps, any> {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  export class SketchPicker extends React.Component<SketchPickerProps, any> {}
 
-   // Zde můžeš přidat další exporty pro jiné pickery, pokud je používáš
-   // např. ChromePicker, PhotoshopPicker atd.
+  // Zde můžeš přidat další exporty pro jiné pickery, pokud je používáš
+  // např. ChromePicker, PhotoshopPicker atd.
 }
-
-// Pokud používáš specifické typy pro styly, můžeš je zde definovat podrobněji
-// declare module 'react-color/lib/components/sketch/Sketch' {
-//    interface SketchPickerStyles { ... }
-// }

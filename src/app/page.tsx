@@ -59,9 +59,9 @@ const popularColors: { [key: string]: string } = {
 // Helper funkce pro generování Tailwind třídy pro barvu
 const getColorClass = (prefix: string, colorValue: string): string => {
   const normalizedHex = colorValue.toLowerCase().slice(0, 7);
-  // OPRAVA: Přejmenování '_' na 'key'
+  // OPRAVA: Vráceno '_' pro nepoužitý klíč
   const entry = Object.entries(popularColors).find(
-    ([key, value]) => value.toLowerCase() === normalizedHex
+    ([_, value]) => value.toLowerCase() === normalizedHex
   );
   const colorName = entry ? entry[0] : null;
   if (!colorValue || colorValue === "transparent" || colorValue.endsWith("00"))
@@ -115,7 +115,6 @@ export default function Home() {
 
   // Výpočet Tailwind tříd
   const tailwindCode = useMemo(() => {
-    // OPRAVA: Použití 'const' místo 'let'
     const classes: string[] = [];
     classes.push(
       "cursor-pointer",
