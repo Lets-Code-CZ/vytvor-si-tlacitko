@@ -58,10 +58,10 @@ const popularColors: { [key: string]: string } = {
 
 // Helper funkce pro generování Tailwind třídy pro barvu
 const getColorClass = (prefix: string, colorValue: string): string => {
-  /* ... (stejné jako předtím) ... */
   const normalizedHex = colorValue.toLowerCase().slice(0, 7);
+  // OPRAVA: Přejmenování '_' na 'key'
   const entry = Object.entries(popularColors).find(
-    ([_, value]) => value.toLowerCase() === normalizedHex
+    ([key, value]) => value.toLowerCase() === normalizedHex
   );
   const colorName = entry ? entry[0] : null;
   if (!colorValue || colorValue === "transparent" || colorValue.endsWith("00"))
@@ -71,12 +71,11 @@ const getColorClass = (prefix: string, colorValue: string): string => {
 
 export default function Home() {
   // --- Stavy ---
+  // (Stavy zůstávají stejné)
   const [buttonText, setButtonText] = useState("Super Tlačítko");
-  // Typografie --- NOVÉ ---
-  const [textSize, setTextSize] = useState("base"); // např. 'sm', 'lg'
-  const [fontWeight, setFontWeight] = useState("semibold"); // např. 'normal', 'bold'
-  const [letterSpacing, setLetterSpacing] = useState("tight"); // např. 'normal', 'wider'
-  // Ostatní stavy
+  const [textSize, setTextSize] = useState("base");
+  const [fontWeight, setFontWeight] = useState("semibold");
+  const [letterSpacing, setLetterSpacing] = useState("tight");
   const [roundedTL, setRoundedTL] = useState(8);
   const [roundedTR, setRoundedTR] = useState(8);
   const [roundedBR, setRoundedBR] = useState(8);
@@ -114,9 +113,10 @@ export default function Home() {
     [useSameBorder, buttonColor, borderColor]
   );
 
-  // Výpočet Tailwind tříd (přidána typografie)
+  // Výpočet Tailwind tříd
   const tailwindCode = useMemo(() => {
-    let classes: string[] = [];
+    // OPRAVA: Použití 'const' místo 'let'
+    const classes: string[] = [];
     classes.push(
       "cursor-pointer",
       "inline-flex",
@@ -124,16 +124,11 @@ export default function Home() {
       "justify-center",
       "gap-2"
     );
-
-    // Typografie --- NOVÉ ---
     classes.push(`text-${textSize}`);
     classes.push(`font-${fontWeight}`);
-    // Pro letter spacing, 'normal' často nemá třídu, ostatní ano
     if (letterSpacing !== "normal") {
       classes.push(`tracking-${letterSpacing}`);
     }
-
-    // Ostatní třídy (stejné jako předtím)
     const isUniformRoundness =
       roundedTL === roundedTR &&
       roundedTR === roundedBR &&
@@ -150,7 +145,7 @@ export default function Home() {
         : `px-[${paddingX}px] py-[${paddingY}px]`
     );
     classes.push(getColorClass("bg", buttonColor));
-    classes.push(getColorClass("text", textColor)); // Základní barva textu
+    classes.push(getColorClass("text", textColor));
     classes.push(`border-[${borderWidth}px]`);
     classes.push(getColorClass("border", finalBorderColor));
     if (boxShadow && boxShadow.trim() !== "none" && boxShadow.trim() !== "") {
@@ -197,7 +192,7 @@ export default function Home() {
     buttonText,
     textSize,
     fontWeight,
-    letterSpacing, // Přidány závislosti na typografii
+    letterSpacing,
     roundedTL,
     roundedTR,
     roundedBR,
@@ -240,11 +235,17 @@ export default function Home() {
     <div className="flex flex-col md:flex-row gap-4 p-4 h-screen max-h-screen bg-zinc-900 text-white overflow-hidden">
       {showModal && <Modal code={tailwindCode} onClose={closeModal} />}
 
-      {/* Panel nastavení - předáváme všechny props, včetně typografie */}
+      {/* Panel nastavení */}
       <ButtonSettings
-        // ... (všechny předchozí props) ...
+        // ... (všechny props) ...
         buttonText={buttonText}
         setButtonText={setButtonText}
+        textSize={textSize}
+        setTextSize={setTextSize}
+        fontWeight={fontWeight}
+        setFontWeight={setFontWeight}
+        letterSpacing={letterSpacing}
+        setLetterSpacing={setLetterSpacing}
         roundedTL={roundedTL}
         setRoundedTL={setRoundedTL}
         roundedTR={roundedTR}
@@ -297,17 +298,10 @@ export default function Home() {
         setTransitionEasing={setTransitionEasing}
         customTransitionEasing={customTransitionEasing}
         setCustomTransitionEasing={setCustomTransitionEasing}
-        // Nové props pro typografii
-        textSize={textSize}
-        setTextSize={setTextSize}
-        fontWeight={fontWeight}
-        setFontWeight={setFontWeight}
-        letterSpacing={letterSpacing}
-        setLetterSpacing={setLetterSpacing}
       />
 
       {/* Hlavní oblast pro náhled */}
-      <main className="w-full flex-grow bg-zinc-950 border border-zinc-900 rounded-xl p-4 lg:p-6 xl:p-8 flex flex-col items-center justify-center text-center lg:gap-6 relative overflow-hidden">
+      <main className="w-full flex-grow bg-zinc-950 border border-zinc-900 rounded-xl p-4 lg:p-6 xl:p-8 flex flex-col items-center justify-center text-center gap-6 relative overflow-hidden">
         {/* Mřížka na pozadí */}
         <div
           className="absolute inset-0 z-0 opacity-10"
@@ -320,18 +314,18 @@ export default function Home() {
 
         {/* Obsah náhledu */}
         <div className="relative z-10 flex flex-col items-center">
-          <div className="lg:mb-8 max-w-lg">
+          <div className="mb-8 max-w-lg">
             <h1 className="text-3xl sm:text-4xl md:text-5xl tracking-tighter font-bold mb-3">
               Náhled tlačítka
             </h1>
-            <p className="hidden lg:block text-sm sm:text-base text-zinc-400 tracking-tight">
+            <p className="text-sm sm:text-base text-zinc-400 tracking-tight">
               Experimentuj s nastaveními! Náhled nyní zobrazuje i změnu barev
-              při najetí myší, kliknutí a <span className="font-bold">nastavení typografie</span>. Pro plný
-              efekt (animace) zkopíruj kód.
+              při najetí myší, kliknutí a nastavení typografie. Pro plný efekt
+              (animace) zkopíruj kód.
             </p>
           </div>
-          {/* Komponenta náhledu tlačítka - PŘIDÁNY TYPOGRAPHY PROPS */}
-          <div className="lg:mt-4">
+          {/* Komponenta náhledu tlačítka */}
+          <div className="mt-4">
             <ButtonPreview
               buttonText={buttonText}
               baseBgColor={buttonColor}
@@ -354,7 +348,6 @@ export default function Home() {
               transitionDuration={transitionDuration}
               transitionEasing={transitionEasing}
               customTransitionEasing={customTransitionEasing}
-              // Nové props pro typografii
               textSize={textSize}
               fontWeight={fontWeight}
               letterSpacing={letterSpacing}
