@@ -307,7 +307,7 @@ export default function Home() {
       />
 
       {/* Hlavní oblast pro náhled */}
-      <main className="w-full flex-grow bg-zinc-950 border border-zinc-900 rounded-xl p-4 lg:p-6 xl:p-8 flex flex-col items-center justify-center text-center gap-6 relative overflow-hidden">
+      <main className="w-full flex-grow bg-zinc-950 border border-zinc-900 rounded-xl p-4 lg:p-6 xl:p-8 flex flex-col items-center justify-center text-center lg:gap-6 relative overflow-hidden">
         {/* Mřížka na pozadí */}
         <div
           className="absolute inset-0 z-0 opacity-10"
@@ -320,18 +320,18 @@ export default function Home() {
 
         {/* Obsah náhledu */}
         <div className="relative z-10 flex flex-col items-center">
-          <div className="mb-8 max-w-lg">
+          <div className="lg:mb-8 max-w-lg">
             <h1 className="text-3xl sm:text-4xl md:text-5xl tracking-tighter font-bold mb-3">
               Náhled tlačítka
             </h1>
-            <p className="text-sm sm:text-base text-zinc-400 tracking-tight">
+            <p className="hidden lg:block text-sm sm:text-base text-zinc-400 tracking-tight">
               Experimentuj s nastaveními! Náhled nyní zobrazuje i změnu barev
               při najetí myší, kliknutí a <span className="font-bold">nastavení typografie</span>. Pro plný
               efekt (animace) zkopíruj kód.
             </p>
           </div>
           {/* Komponenta náhledu tlačítka - PŘIDÁNY TYPOGRAPHY PROPS */}
-          <div className="mt-4">
+          <div className="lg:mt-4">
             <ButtonPreview
               buttonText={buttonText}
               baseBgColor={buttonColor}
