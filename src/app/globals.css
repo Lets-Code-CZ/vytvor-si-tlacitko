@@ -3,6 +3,7 @@
 :root {
   --background: #e6efff;
   --foreground: #101011;
+  --zinc-800: #e6efff;
 }
 
 @theme inline {
@@ -16,6 +17,7 @@
   :root {
     --background: #101011;
     --foreground: #ffffff;
+    --zinc-800: #27272a;
   }
 }
 
@@ -23,4 +25,65 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, Helvetica, sans-serif;
+}
+
+/* Základní styly pro SketchPicker (Light Mode - výchozí) */
+.sketch-picker-themed {
+  background: var(--zinc-800) !important; /* Bílé pozadí */
+  box-shadow: none !important; /* Odstranění výchozího stínu */
+  padding: 0 !important; /* Odstranění výchozího paddingu, řešíme v obalu */
+  border-radius: 0 !important; /* Zaoblení řešíme v obalu */
+}
+
+/* Styly pro input pole uvnitř pickeru (Light Mode) */
+.sketch-picker-themed input {
+  background-color: #f3f4f6 !important; /* Světle šedé pozadí (gray-100) */
+  color: #27272a !important; /* Tmavě šedý text (gray-800) */
+  box-shadow: none !important;
+  border: 1px solid #d1d5db !important; /* Šedá hranice (gray-300) */
+  border-radius: 0.25rem !important; /* mírné zaoblení */
+}
+
+/* Styly pro text (labels) uvnitř pickeru (Light Mode) */
+.sketch-picker-themed .flexbox-fix span {
+   color: #27272a !important; /* Tmavší šedý text (gray-700) */
+}
+
+/* Styly pro labely uvnitř pickeru (dark mode) */
+.sketch-picker-themed .flexbox-fix label {
+   color: #f1f1ff !important; /* Tmavší šedý text (gray-700) */
+}
+
+
+/* Styly pro SketchPicker v Dark Mode */
+.dark .sketch-picker-themed {
+  background: #27272a !important; /* Tmavě šedé pozadí (gray-800) */
+}
+
+/* Styly pro input pole uvnitř pickeru (Dark Mode) */
+.dark .sketch-picker-themed input {
+  background: #27272a !important; /* Tmavší šedé pozadí (gray-700) */
+  color: #f9fafb !important; /* Velmi světlý text (gray-50) */
+  border: 1px solid #27272a !important; /* Tmavší šedá hranice (gray-600) */
+}
+
+/* Styly pro text (labels) uvnitř pickeru (Dark Mode) */
+.dark .sketch-picker-themed .flexbox-fix span {
+   color: #d1d5db !important; /* Světle šedý text (gray-300) */
+}
+
+/* Volitelné: Úprava barvy "šachovnice" pro průhlednost */
+.dark .sketch-picker-themed .sketch-alpha {
+   background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAMUlEQVQ4T2NkYGAQYcAP3uCTZhw1gGGYhAGBZIA/nYDCgMMMbAkYWNDPAYIQABhDGgAAZdADqtekLUQAAAAASUVORK5CYII=') left center !important; /* Tmavší šachovnice */
+}
+
+/* Obalující div pro picker - zajistí padding a zaoblení */
+/* (Tento styl je již v komponentě, ale pro jistotu) */
+.dark .sketch-picker-wrapper { /* Pokud bys chtěl přidat třídu wrapperu */
+    background-color: #27272a; /* Tmavě šedá */
+    border-color: #27272a; /* Tmavší šedá */
+}
+.sketch-picker-wrapper {
+    background-color: #fff; /* Bílá */
+    border-color: #d1d5db; /* Světle šedá */
 }
