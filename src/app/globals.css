@@ -15,7 +15,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #101011;
+    --background: #0c0c14;
     --foreground: #ffffff;
     --zinc-800: #27272a;
   }
